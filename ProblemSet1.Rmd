@@ -1,0 +1,52 @@
+---
+title: "ProblemSet1"
+author: "Emily Williams, Yuwei Liu, Francesco Bollinger"
+date: "19 October 2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercise 1
+
+# Part A
+
+The economic context of a CLRM time series prediction could be inflation rates over a period of time.
+
+# Part B
+
+Conditional Expectation
+
+ $$ E(y|x) = E (x \beta + \epsilon | x) $$ 
+ $$ = E (x \beta | x) + E (\epsilon | x) $$ 
+ $$ = E (x \beta | x) $$ 
+ $$ = x \beta $$ 
+
+Conditional Variance
+
+ $$ V(y|x) = V(x \beta + \epsilon | x) $$ 
+ $$ = V(x \beta | x) + V(\epsilon | x) $$ 
+ $$ = 0 + \epsilon $$
+ $$ = \epsilon $$
+
+# Part C
+
+fileurl = "https://github.com/fivethirtyeight/data/blob/master/steak-survey/steak-risk-survey.csv"
+
+download.file(fileurl,destfile = "~/Emilys digital marvels/UZH/Semester 1/Empirical Methods/Archive(1)/PS 1/.csv")
+
+list.files("~/Emilys digital marvels/UZH/Semester 1/Empirical Methods/Archive(1)/PS 1/.csv")
+
+# 'read.table' function
+fivethirtyeightdata = read.table("~/Emilys digital marvels/UZH/Semester 1/Empirical Methods/Archive(1)/PS 1/.csv", sep=",", header=TRUE)
+head(fivethirtyeightdata) # it shows in the console what the dataset looks like from the top
+tail(fivethirtyeightdata)
+
+download.file(fileURL, destfile = "~/Emilys digital marvels/UZH/Semester 1/Empirical Methods/Archive(1)/PS 1/.csv", mode = "wb", extra='-L')
+list.files("~/Emilys digital marvels/UZH/Semester 1/Empirical Methods/Archive(1)/PS 1/.csv")
+
+fivethirtyeight <- mutate(fivethirtyeight, cooking_tempdetrend=cooking_temp-mean(cooking_temp, na.rm=TRUE))
+
+
