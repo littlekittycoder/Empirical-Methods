@@ -1,0 +1,69 @@
+---
+title: "ProblemSet1"
+author: "Emily Williams, Yuwei Liu, Francesco Bollinger"
+date: "19 October 2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+library(readxl)       # excel files reader
+library(foreign)      # necessary to import datasets in formats like .dta (STATA) etc.
+library(dplyr)        # many useful functions for quick data manipulation
+library(tidyr)        # designed specifically for data tidying
+library(ggplot2)      # (probably) most common package to produce graphs
+library(stargazer)    # best way to export tables in LaTex format
+library(haven)        # good alternative to "foreign", to read STATA/Sas/Spss data
+library(dummies)      # it helps create dummy variables quickly
+library(Hmisc)        # some useful functions for e.g. renaming variables
+library(lmtest)       # great to test linear regression models
+library(sandwich)     # produces robust standard errors
+library(doBy)         # good to produce statistics by group
+library(multiwayvcov) # estimators for clustered standard errors
+library(car)          # nice estimation and post-estimation commands
+library(stringr)      # great for character variables manipulation
+library(datasets)     # package containing many datasets
+library(purrr)        # enhanced features to deal with vectors and functions
+library(vtable)       # nice package for producing tables
+
+## Exercise 1
+
+# Part A
+
+The economic context of a CLRM time series prediction could be inflation rates over a period of time.
+
+# Part B
+
+Conditional Expectation
+
+ $$ E(y|x) = E (x \beta + \epsilon | x) $$ 
+ $$ = E (x \beta | x) + E (\epsilon | x) $$ 
+ $$ = E (x \beta | x) $$ 
+ $$ = x \beta $$ 
+
+Conditional Variance
+
+ $$ V(y|x) = V(x \beta + \epsilon | x) $$ 
+ $$ = V(x \beta | x) + V(\epsilon | x) $$ 
+ $$ = 0 + \sigma^2 $$
+ $$ = \sigma^2 $$
+
+# Part C
+
+
+
+## Exercise 2
+
+library(fivethirtyeight)
+
+attach(steak_survey)
+
+view(steak_survey)
+
+fivethirtyeight <- mutate(fivethirtyeight, cooking_tempdetrend=cooking_temp-mean(cooking_temp, na.rm=TRUE))
+
+newvar1 <- fivethirtyeight$pm25-median(fivethirtyeight$pm25, na.rm=TRUE)
+newvar2 <- fivethirtyeight$pm25-mean(chicago$pm25, na.rm=TRUE)
+
