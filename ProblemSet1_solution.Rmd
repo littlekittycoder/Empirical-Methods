@@ -1,0 +1,94 @@
+---
+title: "ProblemSet1"
+author: "Emily Williams, Yuwei Liu, Francesco Bollinger"
+date: "19 October 2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, message=FALSE , results='hide' }
+library(readxl)       # excel files reader
+library(foreign)      # necessary to import datasets in formats like .dta (STATA) etc.
+library(dplyr)        # many useful functions for quick data manipulation
+library(tidyr)        # designed specifically for data tidying
+library(ggplot2)      # (probably) most common package to produce graphs
+library(stargazer)    # best way to export tables in LaTex format
+library(haven)        # good alternative to "foreign", to read STATA/Sas/Spss data
+library(dummies)      # it helps create dummy variables quickly
+library(Hmisc)        # some useful functions for e.g. renaming variables
+library(lmtest)       # great to test linear regression models
+library(sandwich)     # produces robust standard errors
+library(doBy)         # good to produce statistics by group
+library(multiwayvcov) # estimators for clustered standard errors
+library(car)          # nice estimation and post-estimation commands
+library(stringr)      # great for character variables manipulation
+library(datasets)     # package containing many datasets
+library(purrr)        # enhanced features to deal with vectors and functions
+library(vtable)       # nice package for producing tables
+```
+## Exercise 1
+
+# Part A
+
+The economic context of a CLRM time series prediction could be inflation rates over a period of time.
+
+# Part B
+
+Conditional Expectation
+
+ $$ E(y|x) = E (x \beta + \epsilon | x) $$ 
+ $$ = E (x \beta | x) + E (\epsilon | x) $$ 
+ $$ = E (x \beta | x) $$ 
+ $$ = x \beta $$ 
+
+Conditional Variance
+
+ $$ V(y|x) = V(x \beta + \epsilon | x) $$ 
+ $$ = V(x \beta | x) + V(\epsilon | x) $$ 
+ $$ = 0 + \sigma^2 $$
+ $$ = \sigma^2 $$
+
+# Part C
+
+
+
+## Exercise 2
+```{r}
+library(fivethirtyeight)
+library(plyr)
+attach(steak_survey)
+steak_survey = steak_survey
+
+
+
+steak_survey$cooking_temp <- mapvalues(steak_survey$steak_prep, from = c("Rare", "Medium rare", "Medium", "Medium Well", "Well", NA),
+                           to = c(120, 130, 135, 140, 150, NA))
+View(steak_survey)
+```
+
+
+```{r, message=FALSE , results='hide'}
+set.seed(123)
+for(row in 1:nrow(steak_survey)) {
+        age_row <- steak_survey$age[row]
+        if (is.na(age_row) == FALSE) {
+          age_range <- levels(age_row)[age_row]
+          extracted_range <- as.numeric(unlist(regmatches(levels(steak_survey$age)[steak_survey$age[row]], gregexpr("[[:digit:]]+", levels(steak_survey$age)[steak_survey$age[row]]))))
+          if (length(extracted_range) == 1) {
+                  age_sampled <- sample(c(extracted_range[1]:100))
+          } else {
+                  age_sampled <- sample(c(extracted_range[1]:extracted_range[2]))        
+          }
+          steak_survey$rand_rage[row] <- age_sampled
+        } else {
+           steak_survey$rand_rage[row] <- NA
+        }
+}
+
+```
