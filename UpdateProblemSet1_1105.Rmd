@@ -1,0 +1,124 @@
+---
+title: "ProblemSet1"
+author: "Emily Williams, Yuwei Liu, Francesco Bollinger"
+date: "19 October 2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+library(readxl)       # excel files reader
+library(foreign)      # necessary to import datasets in formats like .dta (STATA) etc.
+
+library(dplyr)        # many useful functions for quick data manipulation
+library(tidyr)        # designed specifically for data tidying
+library(ggplot2)      # (probably) most common package to produce graphs
+library(stargazer)    # best way to export tables in LaTex format
+
+library(haven)        # good alternative to "foreign", to read STATA/Sas/Spss data
+library(dummies)      # it helps create dummy variables quickly
+library(Hmisc)        # some useful functions for e.g. renaming variables
+library(lmtest)       # great to test linear regression models
+library(sandwich)     # produces robust standard errors
+library(doBy)         # good to produce statistics by group
+library(multiwayvcov) # estimators for clustered standard errors
+library(car)          # nice estimation and post-estimation commands
+library(stringr)      # great for character variables manipulation
+library(datasets)     # package containing many datasets
+library(purrr)        # enhanced features to deal with vectors and functions
+library(vtable)       # nice package for producing tables
+```
+## Exercise 1
+
+# Part A
+
+The economic context of a CLRM time series prediction could be inflation rates over a period of time.
+
+# Part B
+
+Conditional Expectation
+
+ 
+ $$ E(y|x) = E (x \beta + \epsilon | x) $$ 
+ $$ = E (x \beta | x) + E (\epsilon | x) $$ 
+ $$ = E (x \beta | x) $$ 
+ $$ = x \beta $$ 
+
+Conditional Variance
+
+ $$ V(y|x) = V(x \beta + \epsilon | x) $$ 
+ $$ = V(x \beta | x) + V(\epsilon | x) $$ 
+ $$ = 0 + \sigma^2 $$
+ $$ = \sigma^2 $$
+
+# Part C
+
+
+
+# Part D
+
+
+
+# Part E
+
+# Part F
+
+## Exercise 2
+#Part A
+```{r warning=FALSE}
+library(fivethirtyeight)
+library(plyr)
+attach(steak_survey)
+steak_survey = steak_survey
+steak_survey$cooking_temp <- mapvalues(steak_survey$steak_prep, from = c("Rare", "Medium rare", "Medium", "Medium Well", "Well"), to = c(120, 130, 135, 140, 150))
+steak_survey$cheat <- as.integer(as.logical(steak_survey$cheated))
+steak_survey$lottery_b <- mapvalues(steak_survey$lottery_a, from = c("TRUE", "FALSE"), to = c("FALSE", "TRUE"))
+steak_survey$riskadverse <- as.integer(as.logical(steak_survey$lottery_b))
+steak_survey$lottery_b <- NULL
+steak_survey$yrs_ed <- mapvalues(steak_survey$educ, from = c("Less than high school degree", "High school degree", "Some college or Associate degree", "Bachelor degree", "Graduate degree", NA), to = c(8, 12, 14, 16, 18, NA))
+View(steak_survey)
+```
+
+
+
+```{r message=FALSE, warning=FALSE, results='hide'}
+set.seed(123)
+steak_survey$rand_age <- NA
+for(row in 1:nrow(steak_survey)) {
+        age_row <- steak_survey$age[row]
+        if (is.na(age_row) == FALSE) {
+          age_range <- levels(age_row)[age_row]
+          extracted_range <- as.numeric(unlist(regmatches(levels(steak_survey$age)[steak_survey$age[row]], gregexpr("[[:digit:]]+", levels(steak_survey$age)[steak_survey$age[row]]))))
+          if (length(extracted_range) == 1) {
+                  age_sampled <- sample(c(extracted_range[1]:100))
+          } else {
+                  age_sampled <- sample(c(extracted_range[1]:extracted_range[2]))        
+          }
+          steak_survey$rand_age[row] <- age_sampled
+        } else {
+           steak_survey$rand_age[row] <- NA
+        }
+}
+
+
+
+
+```
+#Part B
+```{r}
+
+count(steak_survey$cooking_temp)
+summary(steak_survey$cooking_temp)
+summary(steak_survey$cheat)
+summary(steak_survey$riskadverse)
+summary(steak_survey$yrs_ed)
+summary(steak_survey$and_age)
+mapvalues(as.numeric(steak_survey$cooking_temp), from = c(1, 2,  3, 4, 5), to = c(120, 130, 135, 140, 150))
+hist(mapvalues(as.numeric(steak_survey$cooking_temp), from = c(1, 2, 3, 4, 5), to = c(120, 130, 135, 140, 150)))
+```
